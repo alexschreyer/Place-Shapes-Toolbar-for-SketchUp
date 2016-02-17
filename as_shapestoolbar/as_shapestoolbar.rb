@@ -19,11 +19,14 @@ module AS_Extensions
   
     # General variables
     @name = "Place Shapes"
+    @extname = "as_Shapestoolbar"
+    
+    @extdir = File.dirname(__FILE__)   
+    @sfolder = File.join(@extdir, "shapes_ip")
+    @ifolder = File.join(@extdir, "icons")    
   
-    # Localise: Use 1 ft shapes for US and 1 m shapes for everyone else
-    Sketchup.get_locale == "en-US" ? @loc = "ip" : @loc = "m"
-    @sfolder = File.join(File.dirname(__FILE__), "shapes_"+@loc)
-    @ifolder = File.join(File.dirname(__FILE__), "icons")
+    # Set base unit for shapes from stored value
+    @unit = Sketchup.read_default @extname, "unit", "foot"
 
     # @skps = Dir.entries(@sfolder)
     # UI.messagebox @skps
@@ -34,18 +37,80 @@ module AS_Extensions
     
     def self.place_me(name)
       
+      # Definition file to load
       mod = Sketchup.active_model
       skp = File.join(@sfolder, name+".skp")
       
-      mod.import skp, false if !mod.definitions[name]
-      c = mod.definitions[name]
-      mod.place_component c, true
+      # Load defnition and scale it
+      dname = name+"-"+@unit
+      
+      if !mod.definitions[dname]
+      
+          # Scaling factor based on unit
+          case @unit
+          when "inch"
+            scale = 1.0 / 12
+          when "mm"
+            scale = 1.0 / 12 / 2.54 / 10
+          when "cm"
+            scale = 1.0 / 12 / 2.54
+          when "m"
+            scale = 1.0 / 12 / 2.54 * 100
+          else
+            scale = 1.0
+          end
+          t = Geom::Transformation.new scale          
+          
+          # Load definition and give it unit-based name
+          defs = mod.definitions
+          d = defs.load skp
+          d.name = dname
+          
+          # Scale definition entities accordingly
+          ents = []
+          d.entities.each { |e|
+            ents.push e
+          }
+          d.entities.transform_entities(t,ents)
+          
+      end
+      
+      c = mod.definitions[dname]
+      i = mod.place_component c, true
     
     end
 
 
     # =====================
 
+
+    def self.select_unit
+    
+      prompts = ["Base unit"]
+      defaults = [@unit]
+      lists = ["inch|foot|mm|cm|m"]
+      res = UI.inputbox(prompts, defaults, lists, "Set shape base unit")
+      @unit = res[0]
+      Sketchup.write_default @extname, "unit", @unit
+
+    end
+    
+
+    # ============================
+  
+  
+    def self.show_help
+    # Show the website as an About dialog
+    
+      dlg = UI::WebDialog.new(@name+' - Help', true,'AS_Shapestoolbar_Help', 1100, 800, 150, 150, true)
+      dlg.set_url('http://alexschreyer.net/projects/place-shapes-toolbar-extension-for-sketchup/')
+      dlg.show
+      
+    end # show_help
+
+
+    # =====================
+    
     
     # Load extension at startup and add menu items
     if !file_loaded?(__FILE__)
@@ -68,9 +133,25 @@ module AS_Extensions
         cmd.tooltip = s.capitalize
         cmd.status_bar_text = "Place " + s + " (multiple)"
         menu.add_item cmd
-        toolbar = toolbar.add_item cmd    
+        toolbar.add_item cmd    
       
       }
+      
+      menu.add_separator
+      toolbar.add_separator
+      
+      # Add the unit selector
+      s = "Set shape base unit"
+      cmd = UI::Command.new(s.capitalize) { self.select_unit }
+      cmd.small_icon = File.join(@ifolder, "unit_sm.png")
+      cmd.large_icon = File.join(@ifolder, "unit_l.png")
+      cmd.tooltip = s.capitalize
+      cmd.status_bar_text = "Set the base unit for all shapes placed next"
+      menu.add_item cmd
+      toolbar.add_item cmd      
+      
+      # And a link to get help
+      menu.add_item ("Help") { self.show_help }
   
       # Don't forget to show the toolbar
       toolbar.show

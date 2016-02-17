@@ -1,6 +1,6 @@
 =begin
 
-Copyright 2015, Alexander C. Schreyer
+Copyright 2015-2016, Alexander C. Schreyer
 All rights reserved
 
 THIS SOFTWARE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -15,19 +15,18 @@ Website:        http://www.alexschreyer.net/projects/place-shapes-toolbar-extens
 
 Name :          Place Shapes Toolbar
 
-Version:        1.0
+Version:        1.1
 
-Date :          2/2/2015
+Date :          2/16/2016
 
 Description :   A toolbar (and menu item) that lets you place several
-                primitives.
-                All are based on 1 ft in the US and 1 m everywhere else.
+                primitives. These can be scaled based on a picked unit size.
 
 Usage :         The easiest way is to show the "Place Shapes" toolbar and click
                 on the shape you want to place (or use the Draw menu's items.
                 Most shapes will attach themselves to the underlying geometry.
                 Use the move and stretch tool in combination with the solid
-                tools to work with them.
+                tools to work with them. Right-click and "unglue" where needed.
                 You can also always explode them to work with the underlying faces.
 
 History:        1.0 (2/2/2015):
@@ -36,12 +35,13 @@ History:        1.0 (2/2/2015):
                 - Added cpoints to all spheres, etc.
                 - Rotated and scaled pyramid
                 - Sorted shapes better
-                TBD:
+                1.1 (2/16/2016):
                 - Code cleanup
-
-Issues:         N/A
-
-TODO List:      - Preferences: Base unit (inch, mm,...) and scale, stickyness
+                - New icons
+                - Added base unit picker, now items are scaled
+                - Better component naming as a result
+                - Removed metric base items
+                - Added help menu item
 
 =end
 
@@ -57,10 +57,10 @@ require 'extensions'
 
 
 as_shapestoolbar = SketchupExtension.new "Place Shapes Toolbar", "as_shapestoolbar/as_shapestoolbar.rb"
-as_shapestoolbar.copyright= 'Copyright 2015 Alexander C. Schreyer'
+as_shapestoolbar.copyright= 'Copyright 2015-2016 Alexander C. Schreyer'
 as_shapestoolbar.creator= 'Alexander C. Schreyer, www.alexschreyer.net'
-as_shapestoolbar.version = '1.0'
-as_shapestoolbar.description = "A toolbar (and menu item) that lets you place several primitives. All are based on 1 ft in the US and 1 m everywhere else."
+as_shapestoolbar.version = '1.1'
+as_shapestoolbar.description = "A toolbar (and menu item) that lets you place several primitives. These can be scaled based on a picked unit size."
 Sketchup.register_extension as_shapestoolbar, true
 
 
