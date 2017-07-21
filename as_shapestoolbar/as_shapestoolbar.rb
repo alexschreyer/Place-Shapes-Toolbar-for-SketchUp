@@ -1,9 +1,12 @@
 # =====================
 # Main file for Place Shapes Toolbar
+#
+# by Alexander Schreyer, www.alexschreyer.net, mail@alexschreyer.net
+#
 # =====================
 
 
-require 'sketchup'
+require 'sketchup.rb'
 
 
 # =====================
@@ -19,7 +22,7 @@ module AS_Extensions
   
     # General variables
     @name = "Place Shapes"
-    @extname = "as_Shapestoolbar"
+    @extname = "as_shapestoolbar"
     
     @extdir = File.dirname(__FILE__)   
     @sfolder = File.join(@extdir, "shapes_ip")
@@ -28,6 +31,7 @@ module AS_Extensions
     # Set base unit for shapes from stored value
     @unit = Sketchup.read_default @extname, "unit", "foot"
 
+    # Could simply load all SKP files in folder
     # @skps = Dir.entries(@sfolder)
     # UI.messagebox @skps
 
@@ -48,16 +52,16 @@ module AS_Extensions
       
           # Scaling factor based on unit
           case @unit
-          when "inch"
-            scale = 1.0 / 12
-          when "mm"
-            scale = 1.0 / 12 / 2.54 / 10
-          when "cm"
-            scale = 1.0 / 12 / 2.54
-          when "m"
-            scale = 1.0 / 12 / 2.54 * 100
-          else
-            scale = 1.0
+            when "inch"
+              scale = 1.0 / 12
+            when "mm"
+              scale = 1.0 / 12 / 2.54 / 10
+            when "cm"
+              scale = 1.0 / 12 / 2.54
+            when "m"
+              scale = 1.0 / 12 / 2.54 * 100
+            else
+              scale = 1.0
           end
           t = Geom::Transformation.new scale          
           
@@ -102,9 +106,22 @@ module AS_Extensions
     def self.show_help
     # Show the website as an About dialog
     
-      dlg = UI::WebDialog.new(@name+' - Help', true,'AS_Shapestoolbar_Help', 1100, 800, 150, 150, true)
-      dlg.set_url('http://alexschreyer.net/projects/place-shapes-toolbar-extension-for-sketchup/')
-      dlg.show
+      title = @name + ' - Help'
+      url = 'http://alexschreyer.net/projects/place-shapes-toolbar-extension-for-sketchup/'
+    
+      if Sketchup.version.to_f < 17 then  # Use old method
+        d = UI::WebDialog.new( title , true ,
+          title.gsub(/\s+/, "_") , 1000 , 600 , 100 , 100 , true);
+        d.navigation_buttons_enabled = false
+        d.set_url( url )
+        d.show      
+      else
+        d = UI::HtmlDialog.new( { :dialog_title => title, :width => 1000, :height => 600,
+          :style => UI::HtmlDialog::STYLE_DIALOG, :preferences_key => title.gsub(/\s+/, "_") } )
+        d.set_url( url )
+        d.show
+        d.center
+      end      
       
     end # show_help
 
@@ -123,13 +140,22 @@ module AS_Extensions
       shapes = ["box", "roof", "wedge", "pyramid", "hexagon",
                 "sphere", "cylinder", "cone", "dome", "vault", "torus",
                 "icosahedron", "geodesic sphere", "geodesic dome"]
+
+      # Get icon file extension
+      sm = lg = ""    
+      RUBY_PLATFORM =~ /darwin/ ? ext = "pdf" : ext = "svg"
+      if Sketchup.version.to_i < 16  
+        ext = "png"
+        sm = "_sm"
+        lg = "_lg"
+      end
       
       # Add them all to menu and toolbar
       shapes.each { |s|
       
         cmd = UI::Command.new(s.capitalize) { self.place_me(s) }
-        cmd.small_icon = File.join(@ifolder, s + "_sm.png")
-        cmd.large_icon = File.join(@ifolder, s + "_l.png")
+        cmd.small_icon = File.join(@ifolder, s + "#{sm}.#{ext}")
+        cmd.large_icon = File.join(@ifolder, s + "#{lg}.#{ext}")
         cmd.tooltip = s.capitalize
         cmd.status_bar_text = "Place " + s + " (multiple)"
         menu.add_item cmd
@@ -143,8 +169,8 @@ module AS_Extensions
       # Add the unit selector
       s = "Set shape base unit"
       cmd = UI::Command.new(s.capitalize) { self.select_unit }
-      cmd.small_icon = File.join(@ifolder, "unit_sm.png")
-      cmd.large_icon = File.join(@ifolder, "unit_l.png")
+      cmd.small_icon = File.join(@ifolder, "unit#{sm}.#{ext}")
+      cmd.large_icon = File.join(@ifolder, "unit#{lg}.#{ext}")
       cmd.tooltip = s.capitalize
       cmd.status_bar_text = "Set the base unit for all shapes placed next"
       menu.add_item cmd

@@ -1,6 +1,6 @@
 =begin
 
-Copyright 2015-2016, Alexander C. Schreyer
+Copyright 2015-2017, Alexander C. Schreyer
 All rights reserved
 
 THIS SOFTWARE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -15,9 +15,9 @@ Website:        http://www.alexschreyer.net/projects/place-shapes-toolbar-extens
 
 Name :          Place Shapes Toolbar
 
-Version:        1.1
+Version:        1.2
 
-Date :          2/16/2016
+Date :          7/21/2017
 
 Description :   A toolbar (and menu item) that lets you place several
                 primitives. These can be scaled based on a picked unit size.
@@ -42,26 +42,48 @@ History:        1.0 (2/2/2015):
                 - Better component naming as a result
                 - Removed metric base items
                 - Added help menu item
+                1.2 (7/21/2017):
+                - Fixed loader code
+                - Provided SVG/PDF icons for high res displays (SU > 2016)
+                - Help window shows as HtmlDialog (SU > 2017)
 
 =end
 
 
-# =====================
+# ========================
 
 
-require 'sketchup'
-require 'extensions'
+require 'sketchup.rb'
+require 'extensions.rb'
 
 
-# =====================
+# ========================
 
 
-as_shapestoolbar = SketchupExtension.new "Place Shapes Toolbar", "as_shapestoolbar/as_shapestoolbar.rb"
-as_shapestoolbar.copyright= 'Copyright 2015-2016 Alexander C. Schreyer'
-as_shapestoolbar.creator= 'Alexander C. Schreyer, www.alexschreyer.net'
-as_shapestoolbar.version = '1.1'
-as_shapestoolbar.description = "A toolbar (and menu item) that lets you place several primitives. These can be scaled based on a picked unit size."
-Sketchup.register_extension as_shapestoolbar, true
+module AS_Extensions
+
+  module AS_Shapestoolbar
+  
+    @extversion           = "1.2"
+    @exttitle             = "Place Shapes Toolbar"
+    @extname              = "as_shapestoolbar"
+    
+    @extdir = File.dirname(__FILE__)
+    @extdir.force_encoding('UTF-8') if @extdir.respond_to?(:force_encoding)
+    
+    loader = File.join( @extdir , @extname , "as_shapestoolbar.rb" )
+   
+    extension             = SketchupExtension.new( @exttitle , loader )
+    extension.copyright   = "Copyright 2015-#{Time.now.year} Alexander C. Schreyer"
+    extension.creator     = "Alexander C. Schreyer, www.alexschreyer.net"
+    extension.version     = @extversion
+    extension.description = "A toolbar (and Draw menu item) that lets you place several basic shapes (primitives). These can be scaled based on a picked unit size."
+    
+    Sketchup.register_extension( extension , true )
+         
+  end  # module AS_Shapestoolbar
+  
+end  # module AS_Extensions
 
 
-# =====================
+# ========================
