@@ -1,7 +1,7 @@
 Place-Shapes-Toolbar-for-SketchUp
 =================================
 
-Copyright 2015-2016, Alexander C. Schreyer
+Copyright 2015-2017, Alexander C. Schreyer
 All rights reserved
 
 THIS SOFTWARE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -23,5 +23,3 @@ Usage :         The easiest way is to show the "Place Shapes" toolbar and click
                 Use the move and stretch tool in combination with the solid
                 tools to work with them. Right-click and "unglue" where needed.
                 You can also always explode them to work with the underlying faces.
-            
-Version:        1.1 (2/16/2016)
