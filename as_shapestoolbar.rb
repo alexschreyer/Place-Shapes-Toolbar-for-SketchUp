@@ -1,6 +1,6 @@
 =begin
 
-Copyright 2015-2017, Alexander C. Schreyer
+Copyright 2015-2020, Alexander C. Schreyer
 All rights reserved
 
 THIS SOFTWARE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -15,9 +15,9 @@ Website:        http://www.alexschreyer.net/projects/place-shapes-toolbar-extens
 
 Name :          Place Shapes Toolbar
 
-Version:        1.2
+Version:        1.3
 
-Date :          7/21/2017
+Date :          5/6/2020
 
 Description :   A toolbar (and menu item) that lets you place several
                 primitives. These can be scaled based on a picked unit size.
@@ -46,6 +46,8 @@ History:        1.0 (2/2/2015):
                 - Fixed loader code
                 - Provided SVG/PDF icons for high res displays (SU > 2016)
                 - Help window shows as HtmlDialog (SU > 2017)
+                1.3 (5/6/2020)
+                - Help dialog fix (2020 GC issue)
 
 =end
 
@@ -64,7 +66,7 @@ module AS_Extensions
 
   module AS_Shapestoolbar
   
-    @extversion           = "1.2"
+    @extversion           = "1.3"
     @exttitle             = "Place Shapes Toolbar"
     @extname              = "as_shapestoolbar"
     
