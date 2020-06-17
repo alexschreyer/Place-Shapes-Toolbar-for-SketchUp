@@ -87,6 +87,26 @@ module AS_Extensions
 
     # =====================
 
+    
+    def self.place_selection
+    
+      mod = Sketchup.active_model
+      
+      # Work with the first selected component's definition
+      comp = mod.selection.grep( Sketchup::ComponentInstance )[0]
+      
+      if comp
+        c = comp.definition
+        mod.place_component c, true
+      else
+        UI.messagebox "You must first select a component in your model for this tool."
+      end
+
+    end
+
+
+    # =====================
+
 
     def self.select_unit
     
@@ -157,7 +177,7 @@ module AS_Extensions
       # Add them all to menu and toolbar
       shapes.each { |s|
       
-        cmd = UI::Command.new(s.capitalize) { self.place_me(s) }
+        cmd = UI::Command.new( s.capitalize ) { self.place_me(s) }
         cmd.small_icon = File.join(@ifolder, s + "#{sm}.#{ext}")
         cmd.large_icon = File.join(@ifolder, s + "#{lg}.#{ext}")
         cmd.tooltip = s.capitalize
@@ -166,6 +186,15 @@ module AS_Extensions
         toolbar.add_item cmd    
       
       }
+      
+      s = "selection"
+      cmd = UI::Command.new( s.capitalize ) { self.place_selection }
+      cmd.small_icon = File.join(@ifolder, s + "#{sm}.#{ext}")
+      cmd.large_icon = File.join(@ifolder, s + "#{lg}.#{ext}")      
+      cmd.tooltip = s.capitalize
+      cmd.status_bar_text = "Place selected component (multiple)"
+      menu.add_item cmd
+      toolbar.add_item cmd 
       
       menu.add_separator
       toolbar.add_separator

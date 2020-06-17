@@ -15,9 +15,9 @@ Website:        http://www.alexschreyer.net/projects/place-shapes-toolbar-extens
 
 Name :          Place Shapes Toolbar
 
-Version:        1.3
+Version:        1.4
 
-Date :          5/6/2020
+Date :          6/17/2020
 
 Description :   A toolbar (and menu item) that lets you place several
                 primitives. These can be scaled based on a picked unit size.
@@ -48,6 +48,8 @@ History:        1.0 (2/2/2015):
                 - Help window shows as HtmlDialog (SU > 2017)
                 1.3 (5/6/2020)
                 - Help dialog fix (2020 GC issue)
+                1.4 (6/17/2020)
+                - New functionality: Place selected component (multiple)
 
 =end
 
@@ -66,7 +68,7 @@ module AS_Extensions
 
   module AS_Shapestoolbar
   
-    @extversion           = "1.3"
+    @extversion           = "1.4"
     @exttitle             = "Place Shapes Toolbar"
     @extname              = "as_shapestoolbar"
     
