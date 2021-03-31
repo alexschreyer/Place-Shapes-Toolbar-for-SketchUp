@@ -18,7 +18,7 @@ Description :   A toolbar (and menu item) that lets you place several
                 primitives. These can be scaled based on a picked unit size.
                 
 Usage :         The easiest way is to show the "Place Shapes" toolbar and click
-                on the shape you want to place (or use the Draw menu's items.
+                on the shape you want to place (or use the Draw menu's items).
                 Most shapes will attach themselves to the underlying geometry.
                 Use the move and stretch tool in combination with the solid
                 tools to work with them. Right-click and "unglue" where needed.
