@@ -1,4 +1,4 @@
-Place-Shapes-Toolbar-for-SketchUp
+Place Shapes Toolbar Extension for SketchUp
 =================================
 
 Copyright 2015-2023, Alexander C. Schreyer
